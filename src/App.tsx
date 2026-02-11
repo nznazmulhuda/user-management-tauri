@@ -14,7 +14,6 @@ function App() {
   const [editingId, setEditingId] = useState<number | string | null>(null)
 
   const fetchUsers = async () => {
-    // API: GET /users
     const res = await fetch(`${VITE_BACKEND_URL}/users`)
     const data = await res.json()
     setUsers(data)
@@ -22,35 +21,29 @@ function App() {
   }
 
   const createUser = async (user: Omit<User, 'id'>) => {
-    // API: POST /users
     await fetch(`${VITE_BACKEND_URL}/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...user })
     })
 
-    // Local simulation
     const newUser = { ...user, id: Date.now() }
     setUsers([...users, newUser])
   }
 
   const updateUser = async (id: number | string, user: Omit<User, 'id'>) => {
-    // API: PUT/PATCH /users/:id
     await fetch(`${VITE_BACKEND_URL}/users/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user)
     })
 
-    // Local simulation
     setUsers(users.map(u => u.id === id ? { ...u, ...user } : u))
   }
 
   const deleteUser = async (id: number | string) => {
-    // API: DELETE /users/:id
     await fetch(`${VITE_BACKEND_URL}/users/${id}`, { method: 'DELETE' })
 
-    // Local simulation
     setUsers(users.filter(u => u.id !== id))
   }
 
